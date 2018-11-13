@@ -16,7 +16,7 @@ class MainPage extends React.PureComponent {
         <div>
             <Header/>
             <Background>
-                hej
+                hej jävla losers
             </Background>
         </div>
         );
