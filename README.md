@@ -10,5 +10,5 @@ To get things started:
 * Navigate to client folder and run `npm install`
 
 To open the site:
-1. In root folder, run `node server.js`
+1. In Pinboard folder, run `node server.js`
 2. Navigate to Client folder and write `npm start`
