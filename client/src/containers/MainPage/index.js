@@ -19,6 +19,7 @@ class MainPage extends React.PureComponent {
         <Header />
         <Background>
           <AddButton />
+
         </Background>
       </div>
     );
