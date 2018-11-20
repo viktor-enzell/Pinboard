@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
-import Note from '../../components/Note'
+import Note from "../../components/Note";
 
 class MainPage extends React.PureComponent {
   render() {
@@ -13,6 +13,7 @@ class MainPage extends React.PureComponent {
       z-index: 1000;
       padding: 30px;
     `;
+
     return (
       <div>
         <Header />

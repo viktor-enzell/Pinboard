@@ -5,19 +5,16 @@ class Header extends React.PureComponent {
   render() {
     const TopBar = styled.div`
       align-items: center;
-      background-color: #A1A499;
+      background-color: #a1a499;
       height: 150px;
       padding-top: 75px;
-      color: #FE5F55;
+      color: #fe5f55;
       text-align: center;
       font-size: 42px;
       font-family: sans-serif;
       font-weight: 800;
-      
     `;
-    return <TopBar>
-      Notice
-    </TopBar>;
+    return <TopBar>Notice</TopBar>;
   }
 }
 
