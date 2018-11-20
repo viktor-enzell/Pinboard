@@ -16,14 +16,17 @@ class AddButton extends React.PureComponent {
 
 
     const Wrapper = styled.button`
-    width: 200px;
-    height: 200px;
+    width: 240px;
+    height: 225px;
+    margin-right 30px;
     background: #B8D8D8;
+    display: flex;
     outline: none;
     border-radius: 5px;
-    display: flex;
+    border: none;
     flex-direction: column;
     align-items: center;
+    padding: 20px 20px 5px 20px;
     &:hover {
     background: #92bcbc;
     }

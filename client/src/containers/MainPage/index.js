@@ -2,11 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import AddButton from "../../components/AddButton";
+import Note from "../../components/Note";
 
 class MainPage extends React.PureComponent {
   render() {
     const Background = styled.div`
-      background-color: white;
+      display: flex;
+      flex-direction: row;
+      background-color: #fff;
       position: fixed;
       width: 100%;
       height: 100%;
@@ -19,7 +22,7 @@ class MainPage extends React.PureComponent {
         <Header />
         <Background>
           <AddButton />
-
+          <Note />
         </Background>
       </div>
     );
