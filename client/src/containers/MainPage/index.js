@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import Note from "../../components/Note";
+import Modal from "../../components/Modal";
 
 class MainPage extends React.PureComponent {
   render() {
@@ -19,6 +20,7 @@ class MainPage extends React.PureComponent {
         <Header />
         <Background>
           <Note />
+            <Modal/>
         </Background>
       </div>
     );

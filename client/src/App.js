@@ -5,8 +5,7 @@ import MainPage from "./containers/MainPage";
 
 class App extends Component {
   state = {
-    notes: [],
-    newNoteOpen: false,
+      data: null,
   };
 
   componentDidMount() {
@@ -25,10 +24,9 @@ class App extends Component {
     }
     return body;
   };
-
   render() {
     return (
-        <MainPage  />
+        <MainPage />
     );
   }
 }
