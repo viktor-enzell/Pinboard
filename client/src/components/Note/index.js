@@ -37,6 +37,7 @@ class Note extends React.PureComponent {
     return (
       <Wrapper>
         <Heading>Rubrik</Heading>
+        <button onClick = {() => this.props.propagateUpdate("This message comes from the note button")}>CLICK HERE</button>
         <BodyText>{Brod}</BodyText>
         <Date>12/11-2018</Date>
       </Wrapper>

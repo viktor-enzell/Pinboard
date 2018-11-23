@@ -5,6 +5,16 @@ import Note from "../Note/index";
 import Modal from "../Modal/index";
 
 class MainPage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.propagateUpdate = this.propagateUpdate.bind(this);
+  };
+
+  propagateUpdate(note) {
+    this.props.propagateUpdate(note);
+  };
+
   render() {
     const Background = styled.div`
       background-color: #fff;
@@ -19,7 +29,7 @@ class MainPage extends React.PureComponent {
       <div>
         <Header />
         <Background>
-          <Note />
+          <Note propagateUpdate = {this.propagateUpdate} />
             {<Modal
                 bodyChange={bodyChange}
                 headerChange={headerChange}
