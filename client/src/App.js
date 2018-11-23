@@ -1,34 +1,39 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import MainPage from "./containers/MainPage";
+import MainPage from "./components/MainPage";
+
 
 class App extends Component {
   state = {
-    notes: [],
-    newNoteOpen: false,
-  };
-
-  componentDidMount() {
-    // Call our fetch function below once the component mounts
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.express }))
-      .catch(err => console.log(err));
-  }
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = await fetch("/express_backend");
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
+    notes: {},
+    modalState: {
+      open: true,
+      header: "",
+      body: ""
     }
-    return body;
+  };
+  handleHeaderChange = e => {
+    this.setState({ header: e.target.value });
+    console.log(this.state.modalState.header);
+  };
+  handleModalState = e => {
+    this.setState({ body: e.target.value });
+    console.log(this.state.modalState.open);
   };
 
+  handleBodyChange = e => {
+    this.setState({ body: e.target.value });
+    console.log(this.state.modalState.body);
+  };
   render() {
+    const modalState = this.state.modalState.open;
     return (
-        <MainPage  />
+      <MainPage
+        bodyChange={this.handleBodyChange}
+        headerChange={this.handleHeaderChange}
+        modalStateChange={this.handleModalState}
+        modalState={modalState}
+      />
     );
   }
 }
