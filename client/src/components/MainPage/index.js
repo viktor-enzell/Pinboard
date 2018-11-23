@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
-import Note from "../../components/Note";
-import Modal from "../../components/Modal";
+import Note from "../Note/index";
+import Modal from "../Modal/index";
 
 class MainPage extends React.PureComponent {
   render() {
@@ -14,13 +14,17 @@ class MainPage extends React.PureComponent {
       z-index: 1000;
       padding: 30px;
     `;
-
+    const { bodyChange, headerChange, modalStateChange } = this.props;
     return (
       <div>
         <Header />
         <Background>
           <Note />
-            <Modal/>
+            {<Modal
+                bodyChange={bodyChange}
+                headerChange={headerChange}
+                modalStateChange={modalStateChange}
+            />}
         </Background>
       </div>
     );

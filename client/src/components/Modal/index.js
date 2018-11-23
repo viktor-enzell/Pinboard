@@ -2,30 +2,16 @@ import React from "react";
 import { Wrapper, HeaderInput, BodyText, Footer, Main, Submit } from "./Styling";
 
 class Modal extends React.PureComponent {
-  state = {
-    header: '',
-    body: '',
-    date: ''
-  };
-
-  handleHeaderChange = e => {
-    this.setState({ header: e.target.value });
-    console.log(this.state.header)
-  };
-
-  handleBodyChange = e => {
-    this.setState({ body: e.target.value });
-    console.log(this.state.body)
-    };
 
   render() {
+    const { bodyChange, headerChange } = this.props;
     return (
       <Wrapper>
         <Main>
-          <HeaderInput placeholder="Rubrik" onChange={this.handleHeaderChange} />
-          <BodyText placeholder="Din memo" onChange={this.handleBodyChange}/>
+          <HeaderInput placeholder="Rubrik" onChange={headerChange} />
+          <BodyText placeholder="Din memo" onChange={bodyChange}/>
           <Footer>
-            <Submit>hej</Submit>
+            <Submit>Spara</Submit>
           </Footer>
         </Main>
       </Wrapper>
