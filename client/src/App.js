@@ -33,20 +33,20 @@ class App extends Component {
     console.log(this.state.modalState.open);
   };
 
-  updatePinboard(note) {
-    var newNotes = this.state.notes.slice();
-    newNotes.push(note);
-    this.setState({ notes : newNotes });
-    console.log(this.state.notes);
-  }
-
-  propagateUpdate(note) {
-    this.socket.emit('propagate', { note })
-  }
-
   handleBodyChange = e => {
     this.setState({ body: e.target.value });
     console.log(this.state.modalState.body);
+  };
+
+  updatePinboard(note) {
+    this.setState({ open: false,
+                    notes: { note }
+    });
+    console.log(this.state.notes);
+  };
+
+  propagateUpdate(note) {
+    this.socket.emit('propagate', { note })
   };
 
   render() {

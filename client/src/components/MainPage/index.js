@@ -29,8 +29,9 @@ class MainPage extends React.PureComponent {
       <div>
         <Header />
         <Background>
-          <Note propagateUpdate = {this.propagateUpdate} />
+          <Note />
             {<Modal
+                propagateUpdate = {this.propagateUpdate}
                 bodyChange={bodyChange}
                 headerChange={headerChange}
                 modalStateChange={modalStateChange}
