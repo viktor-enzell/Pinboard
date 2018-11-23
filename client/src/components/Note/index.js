@@ -36,7 +36,7 @@ class Note extends React.PureComponent {
     `;
     return (
       <Wrapper>
-        <Heading>Rubrik</Heading>
+        <Heading>Header</Heading>
         <BodyText>{Brod}</BodyText>
         <Date>12/11-2018</Date>
       </Wrapper>

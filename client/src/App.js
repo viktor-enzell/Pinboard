@@ -7,11 +7,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.propagateUpdate = this.propagateUpdate.bind(this);
+    this.hasRecivedNotes = false;
 
     this.socket = socketIOClient('http://localhost:5000/');
-
-    this.socket.on('propagate', note => this.updatePinboard(note));
+    this.socket.on('allNotes', notes => this.initNotes(notes));
+    this.socket.on('noteUpdate', note => this.updateNote(note));
+    this.socket.on('shareNotes', amountOfClients => this.sendAllNotes(amountOfClients));
   };
 
   state = {
@@ -23,37 +24,59 @@ class App extends Component {
     }
   };
 
-  handleHeaderChange = e => {
-    this.setState({ header: e.target.value });
-    console.log(this.state.modalState.header);
+  initNotes(notes) {
+    if(!this.hasRecivedNotes) {
+      this.setState({ notes: notes.notes });
+      this.hasRecivedNotes = true;
+    }
   };
 
-  handleModalState = e => {
-    this.setState({ body: e.target.value });
-    console.log(this.state.modalState.open);
+  sendAllNotes(amountOfClients) {
+    if(amountOfClients < 2) {
+      this.hasRecivedNotes = true;
+    }
+    if(this.hasRecivedNotes) {
+      this.socket.emit('allNotes', { notes: this.state.notes });
+    }
+  };
+
+  propagateUpdate(noteID) {
+    this.socket.emit('noteUpdate', { ID: noteID,
+      header: this.state.modalState.header,
+      body: this.state.modalState.body,
+    });
+  };
+
+  updateNote(note) {
+    var updatedNotes = this.state.notes;
+    updatedNotes[note.ID] = note;
+    this.setState({ notes: updatedNotes });
+  };
+
+  handleHeaderChange = e => {
+    this.setState({
+      modalState: {...this.state.modalState, header: e.target.value}
+    });
   };
 
   handleBodyChange = e => {
-    this.setState({ body: e.target.value });
-    console.log(this.state.modalState.body);
-  };
-
-  updatePinboard(note) {
-    this.setState({ open: false,
-                    notes: { note }
+    this.setState({
+      modalState: {...this.state.modalState, body: e.target.value}
     });
-    console.log(this.state.notes);
   };
 
-  propagateUpdate(note) {
-    this.socket.emit('propagate', { note })
+  handleModalState = e => {
+    this.setState({
+      modalState: {...this.state.modalState, open: false}
+    });
+    var noteID = Object.keys(this.state.notes).length + 1;
+    this.propagateUpdate(noteID);
   };
 
   render() {
     const modalState = this.state.modalState.open;
     return (
       <MainPage
-        propagateUpdate = {this.propagateUpdate}
         bodyChange={this.handleBodyChange}
         headerChange={this.handleHeaderChange}
         modalStateChange={this.handleModalState}
