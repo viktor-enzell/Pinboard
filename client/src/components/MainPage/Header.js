@@ -8,7 +8,7 @@ class Header extends React.PureComponent {
       background-color: #a1a499;
       height: 150px;
       padding-top: 75px;
-      color: #fe5f55;
+      color: #eef5db;
       text-align: center;
       font-size: 42px;
       font-family: sans-serif;

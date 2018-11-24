@@ -1,34 +1,87 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import MainPage from "./containers/MainPage";
+import MainPage from "./components/MainPage";
+import socketIOClient from "socket.io-client"
 
 class App extends Component {
-  state = {
-    notes: [],
-    newNoteOpen: false,
+  constructor(props) {
+    super(props);
+
+    this.hasRecivedNotes = false;
+
+    this.socket = socketIOClient('http://localhost:5000/');
+    this.socket.on('allNotes', notes => this.initNotes(notes));
+    this.socket.on('noteUpdate', note => this.updateNote(note));
+    this.socket.on('shareNotes', amountOfClients => this.sendAllNotes(amountOfClients));
   };
 
-  componentDidMount() {
-    // Call our fetch function below once the component mounts
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.express }))
-      .catch(err => console.log(err));
-  }
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = await fetch("/express_backend");
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
+  state = {
+    notes: {},
+    modalState: {
+      open: true,
+      header: "",
+      body: ""
     }
-    return body;
+  };
+
+  initNotes(notes) {
+    if(!this.hasRecivedNotes) {
+      this.setState({ notes: notes.notes });
+      this.hasRecivedNotes = true;
+    }
+  };
+
+  sendAllNotes(amountOfClients) {
+    if(amountOfClients < 2) {
+      this.hasRecivedNotes = true;
+    }
+    if(this.hasRecivedNotes) {
+      this.socket.emit('allNotes', { notes: this.state.notes });
+    }
+  };
+
+  propagateUpdate(noteID) {
+    this.socket.emit('noteUpdate', { ID: noteID,
+      header: this.state.modalState.header,
+      body: this.state.modalState.body,
+    });
+  };
+
+  updateNote(note) {
+    var updatedNotes = this.state.notes;
+    updatedNotes[note.ID] = note;
+    this.setState({ notes: updatedNotes });
+  };
+
+  handleHeaderChange = e => {
+    this.setState({
+      modalState: {...this.state.modalState, header: e.target.value}
+    });
+  };
+
+  handleBodyChange = e => {
+    this.setState({
+      modalState: {...this.state.modalState, body: e.target.value}
+    });
+  };
+
+  handleModalState = e => {
+    this.setState({
+      modalState: {...this.state.modalState, open: false}
+    });
+    var noteID = Object.keys(this.state.notes).length + 1;
+    this.propagateUpdate(noteID);
   };
 
   render() {
+    const modalState = this.state.modalState.open;
     return (
-        <MainPage  />
+      <MainPage
+        bodyChange={this.handleBodyChange}
+        headerChange={this.handleHeaderChange}
+        modalStateChange={this.handleModalState}
+        modalState={modalState}
+      />
     );
   }
 }
