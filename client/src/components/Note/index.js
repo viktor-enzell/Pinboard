@@ -8,8 +8,8 @@ class Note extends React.PureComponent {
       "Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.";
     const Wrapper = styled.div`
       display: flex;
-      flex-direction: column;
       padding: 20px 20px 5px 20px;
+      flex-direction: column;
       height: 200px;
       width: 200px;
       background: #b8d8d8;
