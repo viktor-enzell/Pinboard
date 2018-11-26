@@ -3,18 +3,20 @@ import styled from "styled-components";
 
 class Note extends React.PureComponent {
   render() {
-    const Brod =
-      "Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är." +
-      "Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är.";
-    const Wrapper = styled.div`
+    const Wrapper = styled.button`
       display: flex;
       padding: 20px 20px 5px 20px;
+      margin-right: 30px;
       flex-direction: column;
-      height: 200px;
-      width: 200px;
+      width: 240px;
+      height: 225px;
       background: #b8d8d8;
       border-radius: 5px;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      &:hover {
+        background: #92bcbc;
+      }
     `;
 
     const Heading = styled.span`
@@ -34,10 +36,11 @@ class Note extends React.PureComponent {
       margin-top: 180px;
       margin-left: 135px;
     `;
+    const { header, body, editNote } = this.props;
     return (
-      <Wrapper>
-        <Heading>Header</Heading>
-        <BodyText>{Brod}</BodyText>
+      <Wrapper onClick={editNote}>
+        <Heading>{header}</Heading>
+        <BodyText>{body}</BodyText>
         <Date>12/11-2018</Date>
       </Wrapper>
     );

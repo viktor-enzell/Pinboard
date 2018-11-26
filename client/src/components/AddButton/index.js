@@ -5,20 +5,16 @@ class AddButton extends React.PureComponent {
   render() {
 
     const Span = styled.span`
-      font-size: 120px;
-         
+      font-size: 120px;   
     `;
-
     const B = styled.span`
       font-size: 15px;
-      
     `;
-
 
     const Wrapper = styled.button`
     width: 240px;
     height: 225px;
-    margin-right 30px;
+    margin-right: 30px;
     background: #B8D8D8;
     display: flex;
     outline: none;
@@ -27,15 +23,15 @@ class AddButton extends React.PureComponent {
     flex-direction: column;
     align-items: center;
     padding: 20px 20px 5px 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
     &:hover {
     background: #92bcbc;
     }
     `;
-
-
-
+    const { handleModalState } = this.props;
     return (
-      <Wrapper>
+      <Wrapper onClick={handleModalState}>
         <Span>+</Span>
         <B>Press me to add a note</B>
       </Wrapper>
