@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "./Header";
 import AddButton from "../../components/AddButton";
 import Note from "../../components/Note";
-import Note from "../Note/index";
+//import Note from "../Note/index";
 import Modal from "../Modal/index";
 
 class MainPage extends React.PureComponent {
