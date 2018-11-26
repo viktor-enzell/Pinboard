@@ -19,6 +19,7 @@ class App extends Component {
     notes: {},
     modalState: {
       open: true,
+      id: -1,
       header: "",
       body: ""
     }
@@ -28,6 +29,7 @@ class App extends Component {
     if(!this.hasRecivedNotes) {
       this.setState({ notes: notes.notes });
       this.hasRecivedNotes = true;
+      console.log(this.state.notes);
     }
   };
 
@@ -40,8 +42,8 @@ class App extends Component {
     }
   };
 
-  propagateUpdate(noteID) {
-    this.socket.emit('noteUpdate', { ID: noteID,
+  propagateUpdate() {
+    this.socket.emit('noteUpdate', { ID: this.state.modalState.id,
       header: this.state.modalState.header,
       body: this.state.modalState.body,
     });
@@ -51,26 +53,40 @@ class App extends Component {
     var updatedNotes = this.state.notes;
     updatedNotes[note.ID] = note;
     this.setState({ notes: updatedNotes });
+    console.log(this.state.notes);
+  };
+
+  setNewNoteID() {
+    this.socket.emit('getNewID');
+    this.socket.on('getNewID', noteID => {
+      this.setState({
+        modalState: {...this.state.modalState, id: noteID}
+      });
+      console.log(this.state.modalState.id);
+    });
   };
 
   handleHeaderChange = e => {
+    if(this.state.modalState.id === -1) {
+      this.setNewNoteID();
+    }
     this.setState({
       modalState: {...this.state.modalState, header: e.target.value}
     });
+    this.propagateUpdate();
   };
 
   handleBodyChange = e => {
     this.setState({
       modalState: {...this.state.modalState, body: e.target.value}
     });
+    this.propagateUpdate();
   };
 
   handleModalState = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
     });
-    var noteID = Object.keys(this.state.notes).length + 1;
-    this.propagateUpdate(noteID);
   };
 
   render() {
