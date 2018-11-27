@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 class Note extends React.PureComponent {
+
+
   render() {
     const Brod =
       "Massor med viktiga noteringar. DIF är bäst. Även Erik Lövgren, vilken jävla CHEF han är." +
@@ -29,6 +31,19 @@ class Note extends React.PureComponent {
       overflow-style: auto;
     `;
 
+    const Trash = styled.button`
+      font-size: 14px;
+      margin-left: 180px;
+      position: absolute;
+      border: none;
+      //background: none;
+      border-radius: 55px;
+      outline: none;
+      &:hover {
+      background: #92bcbc;
+      }
+      `;
+
     const Date = styled.span`
       position: absolute;
       margin-top: 180px;
@@ -36,6 +51,7 @@ class Note extends React.PureComponent {
     `;
     return (
       <Wrapper>
+        <Trash onClick={this.RemoveNote}>X</Trash>
         <Heading>Header</Heading>
         <BodyText>{Brod}</BodyText>
         <Date>12/11-2018</Date>
