@@ -43,10 +43,12 @@ class App extends Component {
   };
 
   propagateUpdate() {
-    this.socket.emit('noteUpdate', { ID: this.state.modalState.id,
-      header: this.state.modalState.header,
-      body: this.state.modalState.body,
-    });
+    if(this.state.modalState.id !== -1) {
+      this.socket.emit('noteUpdate', { ID: this.state.modalState.id,
+        header: this.state.modalState.header,
+        body: this.state.modalState.body,
+      });
+    }
   };
 
   updateNote(note) {
@@ -77,6 +79,9 @@ class App extends Component {
   };
 
   handleBodyChange = e => {
+    if(this.state.modalState.id === -1) {
+      this.setNewNoteID();
+    }
     this.setState({
       modalState: {...this.state.modalState, body: e.target.value}
     });
