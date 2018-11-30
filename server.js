@@ -9,6 +9,7 @@ const io = socketIO(server);
 var clientCounter = 0;
 var noteID = 0;
 var notesBeingEdited = [];
+var versionCheck = 0;
 
 io.on('connection', socket => {
   console.log('New client connected');
@@ -20,12 +21,17 @@ io.on('connection', socket => {
   // Send notes to newly connected client
   socket.on('allNotes', (notes) => {
     console.log('Notes received at server: ', notes);
-    io.sockets.emit('allNotes', notes);
+    if (notes.versionCheck >= versionCheck) {
+      io.sockets.emit('allNotes', notes);
+      versionCheck = notes.versionCheck;
+    }
+    console.log(versionCheck);
+    console.log(notes.versionCheck);
   });
 
   // Client requesting to edit note
   socket.on('requestToEdit', (noteID) => {
-    if(notesBeingEdited.includes(noteID.ID)) {
+    if (notesBeingEdited.includes(noteID.ID)) {
       socket.emit('requestDenied');
     } else {
       notesBeingEdited.push(noteID.ID);
@@ -35,8 +41,8 @@ io.on('connection', socket => {
 
   // Client is finished editing note. Lock gets dropped
   socket.on('finishedEditing', (noteID) => {
-    for(var i = 0; i < notesBeingEdited.length-1; i++){
-      if(notesBeingEdited[i] === noteID.ID) {
+    for (var i = 0; i < notesBeingEdited.length - 1; i++) {
+      if (notesBeingEdited[i] === noteID.ID) {
         notesBeingEdited.splice(i, 1);
       }
     }
@@ -47,6 +53,8 @@ io.on('connection', socket => {
   socket.on('noteUpdate', (note) => {
     console.log('Note received at server: ', note);
     io.sockets.emit('noteUpdate', note);
+    versionCheck++;
+    console.log(versionCheck);
   });
 
   // Distribute new note id
@@ -54,6 +62,10 @@ io.on('connection', socket => {
     noteID++;
     socket.emit('getNewID', noteID);
   });
+
+  setInterval(() => {
+    io.sockets.emit('shareNotes', clientCounter);
+  }, 5000);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');

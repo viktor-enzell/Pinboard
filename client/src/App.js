@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "./App.css";
 import MainPage from "./components/MainPage";
 import socketIOClient from "socket.io-client"
@@ -8,6 +8,7 @@ class App extends Component {
     super(props);
 
     this.hasRecivedNotes = false;
+    this.versionCheck = 0;
 
     this.socket = socketIOClient('http://localhost:5000/');
     this.socket.on('allNotes', notes => this.initNotes(notes));
@@ -26,25 +27,30 @@ class App extends Component {
   };
 
   initNotes(notes) {
-    if(!this.hasRecivedNotes) {
-      this.setState({ notes: notes.notes });
+    if (!this.hasRecivedNotes) {
+      this.setState({notes: notes.notes});
       this.hasRecivedNotes = true;
+      this.versionCheck = notes.versionCheck;
       console.log(this.state.notes);
     }
   };
 
   sendAllNotes(amountOfClients) {
-    if(amountOfClients < 2) {
+    if (amountOfClients < 2) {
       this.hasRecivedNotes = true;
     }
-    if(this.hasRecivedNotes) {
-      this.socket.emit('allNotes', { notes: this.state.notes });
+    if (this.hasRecivedNotes) {
+      this.socket.emit('allNotes', {
+        notes: this.state.notes,
+        versionCheck: this.versionCheck
+      });
     }
   };
 
   propagateUpdate() {
-    if(this.state.modalState.id !== -1) {
-      this.socket.emit('noteUpdate', { ID: this.state.modalState.id,
+    if (this.state.modalState.id !== -1) {
+      this.socket.emit('noteUpdate', {
+        ID: this.state.modalState.id,
         header: this.state.modalState.header,
         body: this.state.modalState.body,
       });
@@ -54,8 +60,10 @@ class App extends Component {
   updateNote(note) {
     var updatedNotes = this.state.notes;
     updatedNotes[note.ID] = note;
-    this.setState({ notes: updatedNotes });
+    this.setState({notes: updatedNotes});
+    this.versionCheck++;
     console.log(this.state.notes);
+    console.log(this.versionCheck);
   };
 
   setNewNoteID() {
@@ -69,7 +77,7 @@ class App extends Component {
   };
 
   handleHeaderChange = e => {
-    if(this.state.modalState.id === -1) {
+    if (this.state.modalState.id === -1) {
       this.setNewNoteID();
     }
     this.setState({
@@ -79,7 +87,7 @@ class App extends Component {
   };
 
   handleBodyChange = e => {
-    if(this.state.modalState.id === -1) {
+    if (this.state.modalState.id === -1) {
       this.setNewNoteID();
     }
     this.setState({
@@ -97,12 +105,12 @@ class App extends Component {
   render() {
     const modalState = this.state.modalState.open;
     return (
-      <MainPage
-        bodyChange={this.handleBodyChange}
-        headerChange={this.handleHeaderChange}
-        modalStateChange={this.handleModalState}
-        modalState={modalState}
-      />
+        <MainPage
+            bodyChange={this.handleBodyChange}
+            headerChange={this.handleHeaderChange}
+            modalStateChange={this.handleModalState}
+            modalState={modalState}
+        />
     );
   }
 }
