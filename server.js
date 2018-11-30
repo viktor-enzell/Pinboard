@@ -9,7 +9,7 @@ const io = socketIO(server);
 var clientCounter = 0;
 var noteID = 0;
 var notesBeingEdited = [];
-var versionCheck = 0;
+var version = 0;
 
 io.on('connection', socket => {
   console.log('New client connected');
@@ -21,12 +21,12 @@ io.on('connection', socket => {
   // Send notes to newly connected client
   socket.on('allNotes', (notes) => {
     console.log('Notes received at server: ', notes);
-    if (notes.versionCheck >= versionCheck) {
-      io.sockets.emit('allNotes', notes);
-      versionCheck = notes.versionCheck;
+    io.sockets.emit('allNotes', notes);
+    if (notes.version > version) {
+      version = notes.version;
     }
-    console.log(versionCheck);
-    console.log(notes.versionCheck);
+    console.log(version);
+    console.log(notes.version);
   });
 
   // Client requesting to edit note
@@ -53,8 +53,8 @@ io.on('connection', socket => {
   socket.on('noteUpdate', (note) => {
     console.log('Note received at server: ', note);
     io.sockets.emit('noteUpdate', note);
-    versionCheck++;
-    console.log(versionCheck);
+    version++;
+    console.log(version);
   });
 
   // Distribute new note id
@@ -63,9 +63,10 @@ io.on('connection', socket => {
     socket.emit('getNewID', noteID);
   });
 
+  // Tell clients to share their notes every 10 sec
   setInterval(() => {
     io.sockets.emit('shareNotes', clientCounter);
-  }, 5000);
+  }, 10000);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');

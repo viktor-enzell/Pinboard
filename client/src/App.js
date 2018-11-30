@@ -1,36 +1,46 @@
 import React, {Component} from "react";
 import "./App.css";
-import MainPage from "./components/MainPage";
-import socketIOClient from "socket.io-client"
+import socketIOClient from "socket.io-client";
+import AddButton from "./components/AddButton";
+import Modal from "./components/Modal";
+import Note from "./components/Note";
+import styled from "styled-components";
+import Header from "./components/MainPage/Header";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.hasRecivedNotes = false;
-    this.versionCheck = 0;
+    this.version = 0;
 
-    this.socket = socketIOClient('http://localhost:5000/');
-    this.socket.on('allNotes', notes => this.initNotes(notes));
-    this.socket.on('noteUpdate', note => this.updateNote(note));
-    this.socket.on('shareNotes', amountOfClients => this.sendAllNotes(amountOfClients));
+    this.socket = socketIOClient("http://localhost:5000/");
+    this.socket.on("allNotes", notes => this.initNotes(notes));
+    this.socket.on("noteUpdate", note => this.updateNote(note));
+    this.socket.on("shareNotes", amountOfClients =>
+        this.sendAllNotes(amountOfClients)
+    );
   };
+
+  shouldComponentUpdate() {
+    return !this.state.modalState.open;
+  }
 
   state = {
     notes: {},
     modalState: {
-      open: true,
       id: -1,
+      open: false,
       header: "",
       body: ""
     }
   };
 
   initNotes(notes) {
-    if (!this.hasRecivedNotes) {
+    if (!this.hasRecivedNotes || notes.version > this.version) {
       this.setState({notes: notes.notes});
       this.hasRecivedNotes = true;
-      this.versionCheck = notes.versionCheck;
+      this.version = notes.version;
       console.log(this.state.notes);
     }
   };
@@ -42,7 +52,7 @@ class App extends Component {
     if (this.hasRecivedNotes) {
       this.socket.emit('allNotes', {
         notes: this.state.notes,
-        versionCheck: this.versionCheck
+        version: this.version
       });
     }
   };
@@ -58,12 +68,12 @@ class App extends Component {
   };
 
   updateNote(note) {
-    var updatedNotes = this.state.notes;
+    const updatedNotes = this.state.notes;
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
-    this.versionCheck++;
+    this.version++;
     console.log(this.state.notes);
-    console.log(this.versionCheck);
+    console.log(this.version);
   };
 
   setNewNoteID() {
@@ -82,8 +92,9 @@ class App extends Component {
     }
     this.setState({
       modalState: {...this.state.modalState, header: e.target.value}
+    }, () => {
+      this.propagateUpdate();
     });
-    this.propagateUpdate();
   };
 
   handleBodyChange = e => {
@@ -92,25 +103,61 @@ class App extends Component {
     }
     this.setState({
       modalState: {...this.state.modalState, body: e.target.value}
+    }, () => {
+      this.propagateUpdate();
     });
-    this.propagateUpdate();
   };
 
-  handleModalState = e => {
+  handleModalState = () => {
+    this.setState({
+      modalState: {...this.state.modalState, open: !this.state.modalState.open}
+    });
+  };
+
+  submitNewNote = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
     });
   };
 
   render() {
+    const Background = styled.div`
+      display: flex;
+      flex-direction: row;
+      background-color: #fff;
+      position: fixed;
+      width: 100%;
+      flex-wrap: wrap;
+      overflow: auto;
+      overflow-y: hidden;
+      height: 100%;
+      z-index: 1000;
+      padding: 30px;
+      
+    `;
+    console.log(this.state.modalState);
     const modalState = this.state.modalState.open;
     return (
-        <MainPage
-            bodyChange={this.handleBodyChange}
-            headerChange={this.handleHeaderChange}
-            modalStateChange={this.handleModalState}
-            modalState={modalState}
-        />
+        <div>
+          <Header/>
+          <Background>
+            <AddButton handleModalState={this.handleModalState}/>
+            {Object.keys(this.state.notes).map(note => (
+                <Note
+                    key={this.state.notes[note].ID}
+                    header={this.state.notes[note].header}
+                    body={this.state.notes[note].body}
+                    editNote={this.handleModalState}
+                />
+            ))}
+            {modalState && <Modal
+                modalstate
+                headerChange={this.handleHeaderChange}
+                bodyChange={this.handleBodyChange}
+                submitNewNote={this.submitNewNote}
+            />}
+          </Background>
+        </div>
     );
   }
 }
