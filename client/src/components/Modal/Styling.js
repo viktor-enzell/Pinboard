@@ -66,16 +66,3 @@ export const Wrapper = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
 `;
-
-export const CloseButton = styled.button`
-  align-self: flex-end;
-  outline: none;
-  border-radius: 2px;
-  border: none;
-  background: #e2efef;
-  height: 20px;
-  width: 20px;
-  &:hover {
-    background: #e9f3f3;
-  }
-`;

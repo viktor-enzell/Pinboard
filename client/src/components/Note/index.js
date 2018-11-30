@@ -6,7 +6,7 @@ class Note extends React.PureComponent {
     const Wrapper = styled.button`
       display: flex;
       padding: 20px 20px 5px 20px;
-      margin-right: 30px;
+      margin: 0 30px 30px 0;
       flex-direction: column;
       width: 240px;
       height: 225px;

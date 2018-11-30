@@ -6,16 +6,15 @@ import {
   Footer,
   Main,
   Submit,
-  CloseButton
 } from "./Styling";
 
-class Modal extends React.PureComponent {
+class Modal extends React.Component {
+
   render() {
     const { bodyChange, headerChange, submitNewNote } = this.props;
     return (
       <Wrapper>
         <Main>
-          <CloseButton />
           <HeaderInput placeholder="Rubrik" onChange={headerChange} />
           <BodyText placeholder="Din memo" onChange={bodyChange} />
           <Footer>

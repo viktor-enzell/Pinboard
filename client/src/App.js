@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-import MainPage from "./components/MainPage";
 import socketIOClient from "socket.io-client";
+import AddButton from "./components/AddButton";
+import Modal from "./components/Modal";
+import Note from "./components/Note";
+import styled from "styled-components";
+import Header from "./components/MainPage/Header";
 
 class App extends Component {
   constructor(props) {
@@ -15,10 +19,14 @@ class App extends Component {
     this.socket.on("shareNotes", amountOfClients =>
       this.sendAllNotes(amountOfClients)
     );
+
+  }
+  shouldComponentUpdate() {
+      return !this.state.modalState.open;
   }
 
   state = {
-    notes: {1:{ID: 1, header: 'hej', body:'då'}, 2:{ID: 2, header: 'hej', body:'då'}, 3:{ID: 3, header: 'hej', body:'då'}, 4:{ID: 4, header: 'hej', body:'då'}, 5:{ID: 5, header: 'hej', body:'då'}, 6:{ID: 6, header: 'hej', body:'då'}},
+    notes: {1:{ID: 1, header: 'hej', body:'då'}, 2:{ID: 2, header: 'hej', body:'då'}},
     modalState: {
       open: false,
       header: "",
@@ -51,7 +59,7 @@ class App extends Component {
   }
 
   updateNote(note) {
-    var updatedNotes = this.state.notes;
+    const updatedNotes = this.state.notes;
     updatedNotes[note.ID] = note;
     this.setState({ notes: updatedNotes });
   }
@@ -68,7 +76,7 @@ class App extends Component {
     });
   };
 
-  handleModalState = e => {
+  handleModalState = () => {
     this.setState({
       modalState: { ...this.state.modalState, open: !this.state.modalState.open }
     });
@@ -78,22 +86,48 @@ class App extends Component {
     this.setState({
       modalState: { ...this.state.modalState, open: false }
     });
-    var noteID = Object.keys(this.state.notes).length + 1;
+    const noteID = Object.keys(this.state.notes).length + 1;
     this.propagateUpdate(noteID);
   };
 
-  render() {
-      console.log(this.state.notes);
+    render() {
+     const Background = styled.div`
+      display: flex;
+      flex-direction: row;
+      background-color: #fff;
+      position: fixed;
+      width: 100%;
+      flex-wrap: wrap;
+      overflow: auto;
+      overflow-y: hidden;
+      height: 100%;
+      z-index: 1000;
+      padding: 30px;
+      
+    `;
+    console.log(this.state.modalState);
     const modalState = this.state.modalState.open;
     return (
-      <MainPage
-        bodyChange={this.handleBodyChange}
-        headerChange={this.handleHeaderChange}
-        submitNewNote={this.submitNewNote}
-        handleModalState={this.handleModalState}
-        modalState={modalState}
-        notes={this.state.notes}
-      />
+        <div>
+            <Header />
+            <Background>
+                <AddButton handleModalState={this.handleModalState}/>
+                {Object.keys(this.state.notes).map(note =>(
+                    <Note
+                        key={this.state.notes[note].ID}
+                        header={this.state.notes[note].header}
+                        body={this.state.notes[note].body}
+                        editNote={this.handleModalState}
+                    />
+                ))}
+                {modalState && <Modal
+                    modalstate
+                    headerChange={this.handleHeaderChange}
+                    bodyChange={this.handleBodyChange}
+                    submitNewNote={this.submitNewNote}
+                />}
+            </Background>
+        </div>
     );
   }
 }
