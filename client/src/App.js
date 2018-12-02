@@ -41,7 +41,6 @@ class App extends Component {
       this.setState({notes: notes.notes});
       this.hasRecivedNotes = true;
       this.version = notes.version;
-      console.log(this.state.notes);
     }
   };
 
@@ -72,8 +71,6 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
     this.version++;
-    console.log(this.state.notes);
-    console.log(this.version);
   };
 
   setNewNoteID() {
@@ -82,7 +79,6 @@ class App extends Component {
       this.setState({
         modalState: {...this.state.modalState, id: noteID}
       });
-      console.log(this.state.modalState.id);
     });
   };
 
@@ -109,14 +105,25 @@ class App extends Component {
   };
 
   handleModalState = () => {
-    this.setState({
-      modalState: {...this.state.modalState, open: !this.state.modalState.open}
+    this.socket.emit('requestToEdit', {
+      ID: this.state.modalState.id
+    });
+    this.socket.on('requestAccepted', () => {
+      this.setState({
+        modalState: {...this.state.modalState, open: !this.state.modalState.open}
+      });
+    });
+    this.socket.on('requestAccepted', () => {
+      console.log('REQUEST TO EDIT DENIED');
     });
   };
 
   submitNewNote = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
+    });
+    this.socket.emit('finishedEditing', {
+      ID: this.state.modalState.id
     });
   };
 
@@ -135,7 +142,6 @@ class App extends Component {
       padding: 30px;
       
     `;
-    console.log(this.state.modalState);
     const modalState = this.state.modalState.open;
     return (
         <div>
