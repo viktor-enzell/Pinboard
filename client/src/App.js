@@ -113,7 +113,7 @@ class App extends Component {
         modalState: {...this.state.modalState, open: !this.state.modalState.open}
       });
     });
-    this.socket.on('requestAccepted', () => {
+    this.socket.on('requestDenied', () => {
       console.log('REQUEST TO EDIT DENIED');
     });
   };
