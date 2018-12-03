@@ -90,6 +90,12 @@ class App extends Component {
     this.propagateUpdate(noteID);
   };
 
+  deleteNote = (id, e) => {
+    //const notes = object.assign([],this.state.notes);
+    //notes.splice(id,1);
+    //this.setState({notes:notes});
+  }
+
     render() {
      const Background = styled.div`
       display: flex;
@@ -118,6 +124,7 @@ class App extends Component {
                         header={this.state.notes[note].header}
                         body={this.state.notes[note].body}
                         editNote={this.handleModalState}
+                        //deleteNote={this.deleteNote.bind(this,ID)}
                     />
                 ))}
                 {modalState && <Modal

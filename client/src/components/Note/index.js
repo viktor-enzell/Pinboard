@@ -31,15 +31,29 @@ class Note extends React.PureComponent {
       overflow-style: auto;
     `;
 
+    const Trash = styled.button`
+      font-size: 14px;
+      margin-left: 180px;
+      position: absolute;
+      border: none;
+      //background: none;
+      border-radius: 55px;
+      outline: none;
+      &:hover {
+      background: #92bcbc;
+      }
+      `;
+
     const Date = styled.span`
       position: absolute;
       margin-top: 180px;
       margin-left: 135px;
     `;
-    const { header, body, editNote } = this.props;
+    const { header, body, editNote, DeleteNote } = this.props;
     return (
       <Wrapper onClick={editNote}>
         <Heading>{header}</Heading>
+        <Trash onClick={DeleteNote}>X</Trash>
         <BodyText>{body}</BodyText>
         <Date>12/11-2018</Date>
       </Wrapper>
