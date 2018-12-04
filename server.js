@@ -48,6 +48,11 @@ io.on('connection', socket => {
     version++;
   });
 
+  // Tell clients to delete node
+  socket.on('deleteNote', noteID => {
+    io.sockets.emit('deleteNote', noteID);
+  });
+
   // Distribute new note id
   socket.on('getNewID', () => {
     noteID++;

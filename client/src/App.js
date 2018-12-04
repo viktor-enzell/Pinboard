@@ -17,6 +17,7 @@ class App extends Component {
     this.socket = socketIOClient("http://localhost:5000/");
     this.socket.on("allNotes", notes => this.initNotes(notes));
     this.socket.on("noteUpdate", note => this.updateNote(note));
+    this.socket.on("deleteNote", id => this.removeNote(id));
     this.socket.on("shareNotes", amountOfClients =>
       this.sendAllNotes(amountOfClients)
     );
@@ -152,14 +153,19 @@ class App extends Component {
   };
 
   deleteNote = id => {
-    let notesCopy = Object.assign({}, this.state.notes);
-    delete notesCopy[id];
-    console.log(id);
-    this.setState({
-      notes: notesCopy
-    });
+    this.socket.emit('deleteNote', id);
+    this.removeNote(id);
     this.closeModal();
   };
+
+  removeNote(id) {
+    let notesCopy = Object.assign({}, this.state.notes);
+    delete notesCopy[id];
+    this.setState({
+      notes: notesCopy
+    }, () => { this.forceUpdate(); });
+  };
+
   render() {
     const Background = styled.div`
       display: flex;
