@@ -27,23 +27,19 @@ io.on('connection', socket => {
   });
 
   // Client requesting to edit note
-  socket.on('requestToEdit', (noteID) => {
-    if (notesBeingEdited.includes(noteID.ID)) {
-      socket.emit('requestDenied');
+  socket.on('requestToEdit', noteID => {
+    if (notesBeingEdited.includes(noteID)) {
+      socket.emit('requestAnswer', false);
     } else {
-      notesBeingEdited.push(noteID.ID);
-      socket.emit('requestAccepted');
+      notesBeingEdited.push(noteID);
+      socket.emit('requestAnswer', true);
     }
   });
 
   // Client is finished editing note. Lock gets dropped
-  socket.on('finishedEditing', (noteID) => {
-    for (var i = 0; i < notesBeingEdited.length - 1; i++) {
-      if (notesBeingEdited[i] === noteID.ID) {
-        notesBeingEdited.splice(i, 1);
-      }
-    }
-    io.sockets.emit('lockDropped', noteID);
+  socket.on('finishedEditing', noteID => {
+    var index = notesBeingEdited.indexOf(noteID);
+    if (index !== -1) notesBeingEdited.splice(index, 1);
   });
 
   // Propagate note to all clients
@@ -56,6 +52,7 @@ io.on('connection', socket => {
   socket.on('getNewID', () => {
     noteID++;
     socket.emit('getNewID', noteID);
+    notesBeingEdited.push(noteID);
   });
 
   // Tell clients to share their notes every 10 sec

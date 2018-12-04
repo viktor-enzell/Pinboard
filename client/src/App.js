@@ -73,6 +73,8 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
     this.version++;
+    console.log(this.state.notes);
+    console.log(this.version);
   };
 
   handleHeaderChange = e => {
@@ -109,23 +111,40 @@ class App extends Component {
   };
 
   editNote = (noteID) => {
-    this.setState({
-      noteToEdit: noteID,
-      modalState: {
-        ...this.state.modalState,
-        modalMode: "edit",
-        id: noteID,
-        open: true,
-        header: this.state.notes[noteID].header,
-        body: this.state.notes[noteID].body
+    this.socket.emit('requestToEdit', noteID);
+    this.socket.on('requestAnswer', isAllowed => {
+      if(isAllowed) {
+        this.setState({
+          noteToEdit: noteID,
+          modalState: {
+            ...this.state.modalState,
+            modalMode: "edit",
+            id: noteID,
+            open: true,
+            header: this.state.notes[noteID].header,
+            body: this.state.notes[noteID].body
+          }
+        });
+      } else {
+        alert("Note is already being edited.");
+        return;
       }
     });
   };
 
   closeModal = e => {
+    this.socket.emit('finishedEditing', this.state.modalState.id);
     this.setState({
-      modalState: {...this.state.modalState, open: false}
-    });
+      noteToEdit: {},
+      modalState: {
+        ...this.state.modalState,
+        open: false,
+        modalMode: "normal",
+        id: -1,
+        header: "",
+        body: ""
+        }
+      }, () => { this.forceUpdate() });
   };
 
   render() {
