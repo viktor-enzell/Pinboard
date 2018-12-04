@@ -66,3 +66,22 @@ export const Wrapper = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
 `;
+
+export const Trash = styled.button`
+  font-size: 14px;
+  left: 20px;
+  border: none;
+  line-height: 25px;
+  width: 25px;
+  //background: none;
+  border-radius: 5px;
+  outline: none;
+  &:hover {
+    background: #92bcbc;
+  }
+`;
+
+export const TopDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
