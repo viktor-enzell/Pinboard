@@ -28,8 +28,10 @@ class App extends Component {
 
   state = {
     notes: {},
+    noteToEdit: {},
     modalState: {
       id: -1,
+      mode: "normal",
       open: false,
       header: "",
       body: ""
@@ -114,6 +116,21 @@ class App extends Component {
     });
   };
 
+
+  editNote = (e, noteID) => {
+      this.setState({
+          noteToEdit: noteID,
+          modalState: {
+              ...this.state.modalState,
+              mode: "edit",
+              open: !this.state.modalState.open,
+              header: this.state.notes[noteID].header,
+              body: this.state.notes[noteID].body
+          }
+      });
+      console.log(this.state.notes[noteID])
+    };
+
   submitNewNote = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
@@ -135,8 +152,9 @@ class App extends Component {
       padding: 30px;
       
     `;
-    console.log(this.state.modalState);
+    console.log(this.state.noteToEdit);
     const modalState = this.state.modalState.open;
+    console.log(modalState);
     return (
         <div>
           <Header/>
@@ -147,11 +165,12 @@ class App extends Component {
                     key={this.state.notes[note].ID}
                     header={this.state.notes[note].header}
                     body={this.state.notes[note].body}
-                    editNote={this.handleModalState}
+                    editNote={this.editNote}
                 />
             ))}
             {modalState && <Modal
                 modalstate
+                mode={this.state.modalState.mode}
                 headerChange={this.handleHeaderChange}
                 bodyChange={this.handleBodyChange}
                 submitNewNote={this.submitNewNote}
