@@ -22,7 +22,6 @@ class Modal extends React.Component {
       noteToEdit,
       modalMode
     } = this.props;
-
     return (
       <div>
         {modalMode === "normal" && (
