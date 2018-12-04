@@ -2,6 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 class Note extends React.PureComponent {
+  sendID = () => {
+    this.props.deleteNote(e,this.props.id)
+
+  };
+
   render() {
     const Wrapper = styled.button`
       display: flex;
@@ -53,7 +58,7 @@ class Note extends React.PureComponent {
     return (
       <Wrapper onClick={editNote}>
         <Heading>{header}</Heading>
-        <Trash onClick={DeleteNote}>X</Trash>
+        <Trash onClick={this.sendID}>X</Trash>
         <BodyText>{body}</BodyText>
         <Date>12/11-2018</Date>
       </Wrapper>

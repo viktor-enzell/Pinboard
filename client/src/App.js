@@ -90,10 +90,10 @@ class App extends Component {
     this.propagateUpdate(noteID);
   };
 
-  deleteNote = (id, e) => {
-    //const notes = object.assign([],this.state.notes);
-    //notes.splice(id,1);
-    //this.setState({notes:notes});
+  deleteNote = (e, ID) => {
+    const notes = Object.assign([],this.state.notes);
+    notes.splice(id,1);
+    this.setState({notes:notes});
   }
 
     render() {
@@ -121,10 +121,11 @@ class App extends Component {
                 {Object.keys(this.state.notes).map(note =>(
                     <Note
                         key={this.state.notes[note].ID}
+                        id={this.state.notes[note].ID}
                         header={this.state.notes[note].header}
                         body={this.state.notes[note].body}
                         editNote={this.handleModalState}
-                        //deleteNote={this.deleteNote.bind(this,ID)}
+                        deleteNote={this.deleteNote}
                     />
                 ))}
                 {modalState && <Modal
