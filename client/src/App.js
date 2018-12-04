@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "./App.css";
 import socketIOClient from "socket.io-client";
 import AddButton from "./components/AddButton";
@@ -18,9 +18,9 @@ class App extends Component {
     this.socket.on("allNotes", notes => this.initNotes(notes));
     this.socket.on("noteUpdate", note => this.updateNote(note));
     this.socket.on("shareNotes", amountOfClients =>
-        this.sendAllNotes(amountOfClients)
+      this.sendAllNotes(amountOfClients)
     );
-  };
+  }
 
   shouldComponentUpdate() {
     return !this.state.modalState.open;
@@ -40,60 +40,66 @@ class App extends Component {
 
   initNotes(notes) {
     if (!this.hasRecivedNotes || notes.version > this.version) {
-      this.setState({notes: notes.notes});
+      this.setState({ notes: notes.notes });
       this.hasRecivedNotes = true;
       this.version = notes.version;
     }
-  };
+  }
 
   sendAllNotes(amountOfClients) {
     if (amountOfClients < 2) {
       this.hasRecivedNotes = true;
     }
     if (this.hasRecivedNotes) {
-      this.socket.emit('allNotes', {
+      this.socket.emit("allNotes", {
         notes: this.state.notes,
         version: this.version
       });
     }
-  };
+  }
 
   propagateUpdate() {
     if (this.state.modalState.id !== -1) {
-      this.socket.emit('noteUpdate', {
+      this.socket.emit("noteUpdate", {
         ID: this.state.modalState.id,
         header: this.state.modalState.header,
-        body: this.state.modalState.body,
+        body: this.state.modalState.body
       });
     }
-  };
+  }
 
   updateNote(note) {
     const updatedNotes = this.state.notes;
     updatedNotes[note.ID] = note;
-    this.setState({notes: updatedNotes});
+    this.setState({ notes: updatedNotes });
     this.version++;
-  };
+  }
 
   handleHeaderChange = e => {
-    this.setState({
-      modalState: {...this.state.modalState, header: e.target.value}
-    }, () => {
-      this.propagateUpdate();
-    });
+    this.setState(
+      {
+        modalState: { ...this.state.modalState, header: e.target.value }
+      },
+      () => {
+        this.propagateUpdate();
+      }
+    );
   };
 
   handleBodyChange = e => {
-    this.setState({
-      modalState: {...this.state.modalState, body: e.target.value}
-    }, () => {
-      this.propagateUpdate();
-    });
+    this.setState(
+      {
+        modalState: { ...this.state.modalState, body: e.target.value }
+      },
+      () => {
+        this.propagateUpdate();
+      }
+    );
   };
 
   addNote = () => {
-    this.socket.emit('getNewID');
-    this.socket.on('getNewID', noteID => {
+    this.socket.emit("getNewID");
+    this.socket.on("getNewID", noteID => {
       this.setState({
         noteToEdit: noteID,
         modalState: {
@@ -145,6 +151,15 @@ class App extends Component {
       }, () => { this.forceUpdate() });
   };
 
+  deleteNote = id => {
+    let notesCopy = Object.assign({}, this.state.notes);
+    delete notesCopy[id];
+    console.log(id);
+    this.setState({
+      notes: notesCopy
+    });
+    this.closeModal();
+  };
   render() {
     const Background = styled.div`
       display: flex;
@@ -182,6 +197,7 @@ class App extends Component {
               headerChange={this.handleHeaderChange}
               bodyChange={this.handleBodyChange}
               closeModal={this.closeModal}
+              deleteNote={this.deleteNote}
             />
           )}
         </Background>
