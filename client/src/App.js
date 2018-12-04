@@ -73,8 +73,6 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
     this.version++;
-    console.log(this.state.notes);
-    console.log(this.version);
   };
 
   handleHeaderChange = e => {
@@ -124,7 +122,7 @@ class App extends Component {
             header: this.state.notes[noteID].header,
             body: this.state.notes[noteID].body
           }
-        });
+        }, () => { this.forceUpdate(); });
       } else {
         alert("Note is already being edited.");
         return;
