@@ -30,7 +30,7 @@ class App extends Component {
     noteToEdit: {},
     notes: {},
     modalState: {
-      mode: "normal",
+      modalMode: "normal",
       id: -1,
       open: false,
       header: "",
@@ -43,7 +43,6 @@ class App extends Component {
       this.setState({notes: notes.notes});
       this.hasRecivedNotes = true;
       this.version = notes.version;
-      console.log(this.state.notes);
     }
   };
 
@@ -74,24 +73,9 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
     this.version++;
-    console.log(this.state.notes);
-    console.log(this.version);
-  };
-
-  setNewNoteID() {
-    this.socket.emit('getNewID');
-    this.socket.on('getNewID', noteID => {
-      this.setState({
-        modalState: {...this.state.modalState, id: noteID}
-      });
-      console.log(this.state.modalState.id);
-    });
   };
 
   handleHeaderChange = e => {
-    if (this.state.modalState.id === -1) {
-      this.setNewNoteID();
-    }
     this.setState({
       modalState: {...this.state.modalState, header: e.target.value}
     }, () => {
@@ -100,9 +84,6 @@ class App extends Component {
   };
 
   handleBodyChange = e => {
-    if (this.state.modalState.id === -1) {
-      this.setNewNoteID();
-    }
     this.setState({
       modalState: {...this.state.modalState, body: e.target.value}
     }, () => {
@@ -110,29 +91,38 @@ class App extends Component {
     });
   };
 
-  handleModalState = () => {
-    this.setState({
-      modalState: {
-        ...this.state.modalState,
-        open: !this.state.modalState.open
-      }
+  addNote = () => {
+    this.socket.emit('getNewID');
+    this.socket.on('getNewID', noteID => {
+      this.setState({
+        noteToEdit: noteID,
+        modalState: {
+          ...this.state.modalState,
+          modalMode: "normal",
+          id: noteID,
+          open: true,
+          header: "",
+          body: ""
+        }
+      });
     });
   };
 
-  editNote = (e, noteID) => {
+  editNote = (noteID) => {
     this.setState({
       noteToEdit: noteID,
       modalState: {
         ...this.state.modalState,
-        mode: "edit",
-        open: !this.state.modalState.open,
+        modalMode: "edit",
+        id: noteID,
+        open: true,
         header: this.state.notes[noteID].header,
         body: this.state.notes[noteID].body
       }
     });
   };
 
-  submitNewNote = e => {
+  closeModal = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
     });
@@ -153,12 +143,11 @@ class App extends Component {
       padding: 30px;
     `;
     const modalState = this.state.modalState.open;
-    console.log(this.state.modalState.mode);
     return (
       <div>
         <Header />
         <Background>
-          <AddButton handleModalState={this.handleModalState} />
+          <AddButton addNote={this.addNote} />
           {Object.keys(this.state.notes).map(note => (
             <Note
               key={this.state.notes[note].ID}
@@ -170,13 +159,12 @@ class App extends Component {
           ))}
           {modalState && (
             <Modal
-              modalMode={this.state.modalState.mode}
+              modalMode={this.state.modalState.modalMode}
               modalstate
               noteToEdit={this.state.notes[this.state.noteToEdit]}
               headerChange={this.handleHeaderChange}
               bodyChange={this.handleBodyChange}
-              submitNewNote={this.submitNewNote}
-              submitEditedNote={this.submitEditedNote}
+              closeModal={this.closeModal}
             />
           )}
         </Background>

@@ -20,13 +20,10 @@ io.on('connection', socket => {
 
   // Send notes to newly connected client
   socket.on('allNotes', (notes) => {
-    console.log('Notes received at server: ', notes);
     io.sockets.emit('allNotes', notes);
     if (notes.version > version) {
       version = notes.version;
     }
-    console.log(version);
-    console.log(notes.version);
   });
 
   // Client requesting to edit note
@@ -51,10 +48,8 @@ io.on('connection', socket => {
 
   // Propagate note to all clients
   socket.on('noteUpdate', (note) => {
-    console.log('Note received at server: ', note);
     io.sockets.emit('noteUpdate', note);
     version++;
-    console.log(version);
   });
 
   // Distribute new note id

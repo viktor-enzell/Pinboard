@@ -29,9 +29,9 @@ class AddButton extends React.PureComponent {
     background: #92bcbc;
     }
     `;
-    const { handleModalState } = this.props;
+    const { addNote } = this.props;
     return (
-      <Wrapper onClick={handleModalState}>
+      <Wrapper onClick={addNote}>
         <Span>+</Span>
         <B>Press me to add a note</B>
       </Wrapper>

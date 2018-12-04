@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 class Note extends React.PureComponent {
-  handleNoteClick = (e) => {
-      this.props.editNote(e, this.props.id)
+  handleNoteClick = () => {
+      this.props.editNote(this.props.id)
   };
   render() {
     const Wrapper = styled.div`
@@ -40,8 +40,7 @@ class Note extends React.PureComponent {
       margin-left: 135px;
     `;
 
-    const { header, body, modalMode} = this.props;
-    console.log(modalMode);
+    const { header, body} = this.props;
     return (
            <Wrapper
                 onClick={this.handleNoteClick}>
