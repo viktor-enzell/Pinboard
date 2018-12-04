@@ -27,8 +27,10 @@ class App extends Component {
   }
 
   state = {
+    noteToEdit: {},
     notes: {},
     modalState: {
+      modalMode: "normal",
       id: -1,
       open: false,
       header: "",
@@ -41,7 +43,6 @@ class App extends Component {
       this.setState({notes: notes.notes});
       this.hasRecivedNotes = true;
       this.version = notes.version;
-      console.log(this.state.notes);
     }
   };
 
@@ -72,24 +73,9 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({notes: updatedNotes});
     this.version++;
-    console.log(this.state.notes);
-    console.log(this.version);
-  };
-
-  setNewNoteID() {
-    this.socket.emit('getNewID');
-    this.socket.on('getNewID', noteID => {
-      this.setState({
-        modalState: {...this.state.modalState, id: noteID}
-      });
-      console.log(this.state.modalState.id);
-    });
   };
 
   handleHeaderChange = e => {
-    if (this.state.modalState.id === -1) {
-      this.setNewNoteID();
-    }
     this.setState({
       modalState: {...this.state.modalState, header: e.target.value}
     }, () => {
@@ -98,9 +84,6 @@ class App extends Component {
   };
 
   handleBodyChange = e => {
-    if (this.state.modalState.id === -1) {
-      this.setNewNoteID();
-    }
     this.setState({
       modalState: {...this.state.modalState, body: e.target.value}
     }, () => {
@@ -108,13 +91,38 @@ class App extends Component {
     });
   };
 
-  handleModalState = () => {
-    this.setState({
-      modalState: {...this.state.modalState, open: !this.state.modalState.open}
+  addNote = () => {
+    this.socket.emit('getNewID');
+    this.socket.on('getNewID', noteID => {
+      this.setState({
+        noteToEdit: noteID,
+        modalState: {
+          ...this.state.modalState,
+          modalMode: "normal",
+          id: noteID,
+          open: true,
+          header: "",
+          body: ""
+        }
+      });
     });
   };
 
-  submitNewNote = e => {
+  editNote = (noteID) => {
+    this.setState({
+      noteToEdit: noteID,
+      modalState: {
+        ...this.state.modalState,
+        modalMode: "edit",
+        id: noteID,
+        open: true,
+        header: this.state.notes[noteID].header,
+        body: this.state.notes[noteID].body
+      }
+    });
+  };
+
+  closeModal = e => {
     this.setState({
       modalState: {...this.state.modalState, open: false}
     });
@@ -133,31 +141,34 @@ class App extends Component {
       height: 100%;
       z-index: 1000;
       padding: 30px;
-      
     `;
-    console.log(this.state.modalState);
     const modalState = this.state.modalState.open;
     return (
-        <div>
-          <Header/>
-          <Background>
-            <AddButton handleModalState={this.handleModalState}/>
-            {Object.keys(this.state.notes).map(note => (
-                <Note
-                    key={this.state.notes[note].ID}
-                    header={this.state.notes[note].header}
-                    body={this.state.notes[note].body}
-                    editNote={this.handleModalState}
-                />
-            ))}
-            {modalState && <Modal
-                modalstate
-                headerChange={this.handleHeaderChange}
-                bodyChange={this.handleBodyChange}
-                submitNewNote={this.submitNewNote}
-            />}
-          </Background>
-        </div>
+      <div>
+        <Header />
+        <Background>
+          <AddButton addNote={this.addNote} />
+          {Object.keys(this.state.notes).map(note => (
+            <Note
+              key={this.state.notes[note].ID}
+              id={this.state.notes[note].ID}
+              header={this.state.notes[note].header}
+              body={this.state.notes[note].body}
+              editNote={this.editNote}
+            />
+          ))}
+          {modalState && (
+            <Modal
+              modalMode={this.state.modalState.modalMode}
+              modalstate
+              noteToEdit={this.state.notes[this.state.noteToEdit]}
+              headerChange={this.handleHeaderChange}
+              bodyChange={this.handleBodyChange}
+              closeModal={this.closeModal}
+            />
+          )}
+        </Background>
+      </div>
     );
   }
 }

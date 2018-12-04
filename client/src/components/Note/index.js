@@ -2,14 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 class Note extends React.PureComponent {
+  handleNoteClick = () => {
+      this.props.editNote(this.props.id)
+  };
   render() {
-    const Wrapper = styled.button`
+    const Wrapper = styled.div`
       display: flex;
       padding: 20px 20px 5px 20px;
       margin: 0 30px 30px 0;
       flex-direction: column;
-      width: 240px;
-      height: 225px;
+      width: 200px;
+      height: 200px;
       background: #b8d8d8;
       border-radius: 5px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
@@ -36,13 +39,15 @@ class Note extends React.PureComponent {
       margin-top: 180px;
       margin-left: 135px;
     `;
-    const { header, body, editNote } = this.props;
+
+    const { header, body} = this.props;
     return (
-      <Wrapper onClick={editNote}>
-        <Heading>{header}</Heading>
-        <BodyText>{body}</BodyText>
-        <Date>12/11-2018</Date>
-      </Wrapper>
+           <Wrapper
+                onClick={this.handleNoteClick}>
+                <Heading>{header}</Heading>
+                <BodyText>{body}</BodyText>
+                <Date>12/11-2018</Date>
+            </Wrapper>
     );
   }
 }
