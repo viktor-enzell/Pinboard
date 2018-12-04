@@ -5,10 +5,15 @@ import {
   BodyText,
   Footer,
   Main,
-  Submit
+  Submit,
+  Trash,
+  TopDiv
 } from "./Styling";
 
 class Modal extends React.Component {
+  handleClick = () => {
+    this.props.deleteNote(this.props.noteToEdit.ID);
+  };
   render() {
     const {
       bodyChange,
@@ -17,33 +22,38 @@ class Modal extends React.Component {
       noteToEdit,
       modalMode
     } = this.props;
-    console.log(noteToEdit);
-    console.log(modalMode);
+
     return (
-        <div>
-          {modalMode === "normal" && (
-              <Wrapper>
-                <Main>
-                  <HeaderInput placeholder="Header" onChange={headerChange}/>
-                  <BodyText placeholder="Write here!" onChange={bodyChange}/>
-                  <Footer>
-                    <Submit onClick={closeModal}>Spara</Submit>
-                  </Footer>
-                </Main>
-              </Wrapper>
-          )}
-          {modalMode === "edit" && (
-              <Wrapper>
-                <Main>
-                  <HeaderInput onChange={headerChange} defaultValue={noteToEdit.header}/>
-                  <BodyText onChange={bodyChange} defaultValue={noteToEdit.body}/>
-                  <Footer>
-                    <Submit onClick={closeModal}>Spara</Submit>
-                  </Footer>
-                </Main>
-              </Wrapper>
-          )}
-        </div>
+      <div>
+        {modalMode === "normal" && (
+          <Wrapper>
+            <Main>
+              <HeaderInput placeholder="Header" onChange={headerChange} />
+              <BodyText placeholder="Write here!" onChange={bodyChange} />
+              <Footer>
+                <Submit onClick={closeModal}>Spara</Submit>
+              </Footer>
+            </Main>
+          </Wrapper>
+        )}
+        {modalMode === "edit" && (
+          <Wrapper>
+            <Main>
+              <TopDiv>
+                <Trash onClick={this.handleClick}>X</Trash>
+              </TopDiv>
+              <HeaderInput
+                onChange={headerChange}
+                defaultValue={noteToEdit.header}
+              />
+              <BodyText onChange={bodyChange} defaultValue={noteToEdit.body} />
+              <Footer>
+                <Submit onClick={closeModal}>Spara</Submit>
+              </Footer>
+            </Main>
+          </Wrapper>
+        )}
+      </div>
     );
   }
 }
