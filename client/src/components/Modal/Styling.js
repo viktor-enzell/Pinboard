@@ -66,3 +66,16 @@ export const Wrapper = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
 `;
+
+export const Trash = styled.button`
+  font-size: 14px;
+  margin-left: 180px;
+  position: absolute;
+  border: none;
+  //background: none;
+  border-radius: 55px;
+  outline: none;
+  &:hover {
+    background: #92bcbc;
+  }
+`;

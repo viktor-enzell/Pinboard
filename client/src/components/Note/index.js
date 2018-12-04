@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 class Note extends React.PureComponent {
   sendID = () => {
-    this.props.deleteNote(e,this.props.id)
-
+    this.props.deleteNote(this.props.id)
   };
 
   render() {
@@ -36,25 +35,14 @@ class Note extends React.PureComponent {
       overflow-style: auto;
     `;
 
-    const Trash = styled.button`
-      font-size: 14px;
-      margin-left: 180px;
-      position: absolute;
-      border: none;
-      //background: none;
-      border-radius: 55px;
-      outline: none;
-      &:hover {
-      background: #92bcbc;
-      }
-      `;
+
 
     const Date = styled.span`
       position: absolute;
       margin-top: 180px;
       margin-left: 135px;
     `;
-    const { header, body, editNote, DeleteNote } = this.props;
+    const { header, body, editNote } = this.props;
     return (
       <Wrapper onClick={editNote}>
         <Heading>{header}</Heading>

@@ -90,7 +90,7 @@ class App extends Component {
     this.propagateUpdate(noteID);
   };
 
-  deleteNote = (e, ID) => {
+  deleteNote = (id) => {
     const notes = Object.assign([],this.state.notes);
     notes.splice(id,1);
     this.setState({notes:notes});

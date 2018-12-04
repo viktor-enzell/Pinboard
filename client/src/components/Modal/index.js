@@ -6,6 +6,7 @@ import {
   Footer,
   Main,
   Submit,
+  Trash,
 } from "./Styling";
 
 class Modal extends React.Component {
