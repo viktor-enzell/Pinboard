@@ -19,15 +19,18 @@ class App extends Component {
     this.socket.on("shareNotes", amountOfClients =>
       this.sendAllNotes(amountOfClients)
     );
-
   }
   shouldComponentUpdate() {
-      return !this.state.modalState.open;
+    return !this.state.modalState.open;
   }
 
   state = {
-    notes: {1:{ID: 1, header: 'hej', body:'då'}, 2:{ID: 2, header: 'hej', body:'då'}},
+    notes: {
+      1: { ID: 1, header: "hej", body: "då" },
+    },
+    noteToEdit: {},
     modalState: {
+      mode: "normal",
       open: false,
       header: "",
       body: ""
@@ -78,8 +81,25 @@ class App extends Component {
 
   handleModalState = () => {
     this.setState({
-      modalState: { ...this.state.modalState, open: !this.state.modalState.open }
+      modalState: {
+        ...this.state.modalState,
+        open: !this.state.modalState.open
+      }
     });
+  };
+
+  editNote = (e, noteID) => {
+    this.setState({
+      noteToEdit: noteID,
+      modalState: {
+        ...this.state.modalState,
+        mode: "edit",
+        open: !this.state.modalState.open,
+        header: this.state.notes[noteID].header,
+        body: this.state.notes[noteID].body
+      }
+    });
+    console.log(this.state.notes[noteID])
   };
 
   submitNewNote = e => {
@@ -90,8 +110,16 @@ class App extends Component {
     this.propagateUpdate(noteID);
   };
 
-    render() {
-     const Background = styled.div`
+  submitEditedNote = e => {
+    this.setState({
+      modalState: { ...this.state.modalState, open: false }
+    });
+    const noteID = Object.keys(this.state.notes).length + 1;
+    this.propagateUpdate(noteID);
+  };
+
+  render() {
+    const Background = styled.div`
       display: flex;
       flex-direction: row;
       background-color: #fff;
@@ -103,31 +131,36 @@ class App extends Component {
       height: 100%;
       z-index: 1000;
       padding: 30px;
-      
     `;
-    console.log(this.state.modalState);
     const modalState = this.state.modalState.open;
+    console.log(this.state.modalState.mode);
     return (
-        <div>
-            <Header />
-            <Background>
-                <AddButton handleModalState={this.handleModalState}/>
-                {Object.keys(this.state.notes).map(note =>(
-                    <Note
-                        key={this.state.notes[note].ID}
-                        header={this.state.notes[note].header}
-                        body={this.state.notes[note].body}
-                        editNote={this.handleModalState}
-                    />
-                ))}
-                {modalState && <Modal
-                    modalstate
-                    headerChange={this.handleHeaderChange}
-                    bodyChange={this.handleBodyChange}
-                    submitNewNote={this.submitNewNote}
-                />}
-            </Background>
-        </div>
+      <div>
+        <Header />
+        <Background>
+          <AddButton handleModalState={this.handleModalState} />
+          {Object.keys(this.state.notes).map(note => (
+            <Note
+              key={this.state.notes[note].ID}
+              id={this.state.notes[note].ID}
+              header={this.state.notes[note].header}
+              body={this.state.notes[note].body}
+              editNote={this.editNote}
+            />
+          ))}
+          {modalState && (
+            <Modal
+              modalMode={this.state.modalState.mode}
+              modalstate
+              noteToEdit={this.state.notes[this.state.noteToEdit]}
+              headerChange={this.handleHeaderChange}
+              bodyChange={this.handleBodyChange}
+              submitNewNote={this.submitNewNote}
+              submitEditedNote={this.submitEditedNote}
+            />
+          )}
+        </Background>
+      </div>
     );
   }
 }
