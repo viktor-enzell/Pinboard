@@ -11,6 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.noteToEdit = -1;
     this.hasRecivedNotes = false;
     this.version = 0;
 
@@ -116,18 +117,20 @@ class App extends Component {
   };
 
   editNote = (noteID) => {
+    this.noteToEdit = noteID;
+
     this.socket.emit('requestToEdit', noteID);
     this.socket.on('requestAnswer', isAllowed => {
       if(isAllowed) {
         this.setState({
-          noteToEdit: noteID,
+          noteToEdit: this.noteToEdit,
           modalState: {
             ...this.state.modalState,
             modalMode: "edit",
             id: noteID,
             open: true,
-            header: this.state.notes[noteID].header,
-            body: this.state.notes[noteID].body
+            header: this.state.notes[this.noteToEdit].header,
+            body: this.state.notes[this.noteToEdit].body
           }
         }, () => { this.forceUpdate(); });
       } else {
