@@ -8,7 +8,7 @@ const io = socketIO(server);
 
 var clientCounter = 0;
 var noteID = 0;
-var notesBeingEdited = [];
+var notesBeingEdited = {};
 var version = 0;
 
 io.on('connection', socket => {
@@ -28,18 +28,17 @@ io.on('connection', socket => {
 
   // Client requesting to edit note
   socket.on('requestToEdit', noteID => {
-    if (notesBeingEdited.includes(noteID)) {
+    if (notesBeingEdited.hasOwnProperty(noteID)) {
       socket.emit('requestAnswer', false);
     } else {
-      notesBeingEdited.push(noteID);
+      notesBeingEdited[noteID] = socket.id;
       socket.emit('requestAnswer', true);
     }
   });
 
   // Client is finished editing note. Lock gets dropped
   socket.on('finishedEditing', noteID => {
-    var index = notesBeingEdited.indexOf(noteID);
-    if (index !== -1) notesBeingEdited.splice(index, 1);
+    delete notesBeingEdited[noteID];
   });
 
   // Propagate note to all clients
@@ -57,7 +56,7 @@ io.on('connection', socket => {
   socket.on('getNewID', () => {
     noteID++;
     socket.emit('getNewID', noteID);
-    notesBeingEdited.push(noteID);
+    notesBeingEdited[noteID] = socket.id;
   });
 
   // Tell clients to share their notes every 10 sec
