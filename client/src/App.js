@@ -19,9 +19,9 @@ class App extends Component {
     this.socket.on("allNotes", notes => this.initNotes(notes));
     this.socket.on("noteUpdate", note => this.updateNote(note));
     this.socket.on("deleteNote", id => this.removeNote(id));
-    this.socket.on("shareNotes", amountOfClients =>
-      this.sendAllNotes(amountOfClients)
-    );
+    this.socket.on("shareNotes", amountOfClients => this.sendAllNotes(amountOfClients));
+    this.socket.on('requestAnswer', isAllowed => this.requestToEditAnswered(isAllowed));
+    this.socket.on("getNewID", noteID => this.newIdRecieved(noteID));
   }
 
   shouldComponentUpdate() {
@@ -101,43 +101,43 @@ class App extends Component {
 
   addNote = () => {
     this.socket.emit("getNewID");
-    this.socket.on("getNewID", noteID => {
-      this.setState({
-        noteToEdit: noteID,
-        modalState: {
-          ...this.state.modalState,
-          modalMode: "normal",
-          id: noteID,
-          open: true,
-          header: "",
-          body: ""
-        }
-      });
+  };
+
+  newIdRecieved(noteID) {
+    this.setState({
+      noteToEdit: noteID,
+      modalState: {
+        ...this.state.modalState,
+        modalMode: "normal",
+        id: noteID,
+        open: true,
+        header: "",
+        body: ""
+      }
     });
   };
 
   editNote = (noteID) => {
     this.noteToEdit = noteID;
-
     this.socket.emit('requestToEdit', noteID);
-    this.socket.on('requestAnswer', isAllowed => {
-      if(isAllowed) {
-        this.setState({
-          noteToEdit: this.noteToEdit,
-          modalState: {
-            ...this.state.modalState,
-            modalMode: "edit",
-            id: noteID,
-            open: true,
-            header: this.state.notes[this.noteToEdit].header,
-            body: this.state.notes[this.noteToEdit].body
-          }
-        }, () => { this.forceUpdate(); });
-      } else {
-        alert("Note is already being edited.");
-        return;
-      }
-    });
+  };
+
+  requestToEditAnswered(isAllowed) {
+    if(isAllowed) {
+      this.setState({
+        noteToEdit: this.noteToEdit,
+        modalState: {
+          ...this.state.modalState,
+          modalMode: "edit",
+          id: this.noteToEdit,
+          open: true,
+          header: this.state.notes[this.noteToEdit].header,
+          body: this.state.notes[this.noteToEdit].body
+        }
+      }, () => { this.forceUpdate(); });
+    } else {
+      alert("Note is already being edited.");
+    }
   };
 
   closeModal = e => {
