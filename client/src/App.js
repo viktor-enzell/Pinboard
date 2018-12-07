@@ -21,7 +21,7 @@ class App extends Component {
     this.socket.on("deleteNote", id => this.removeNote(id));
     this.socket.on("shareNotes", amountOfClients => this.sendAllNotes(amountOfClients));
     this.socket.on('requestAnswer', isAllowed => this.requestToEditAnswered(isAllowed));
-    this.socket.on("getNewID", noteID => this.newIdRecieved(noteID));
+    this.socket.on("getNewID", noteID => this.newIdReceived(noteID));
   }
 
   shouldComponentUpdate() {
@@ -103,7 +103,7 @@ class App extends Component {
     this.socket.emit("getNewID");
   };
 
-  newIdRecieved(noteID) {
+  newIdReceived(noteID) {
     this.setState({
       noteToEdit: noteID,
       modalState: {
