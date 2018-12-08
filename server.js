@@ -64,8 +64,13 @@ io.on('connection', socket => {
     io.sockets.emit('shareNotes', clientCounter);
   }, 10000);
 
+  // Remove lock from note being edited by client if client disconnects
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    if (Object.values(notesBeingEdited).indexOf(socket.id) > -1) {
+      const key = Object.keys(notesBeingEdited).find(key => notesBeingEdited[key] === socket.id);
+      delete notesBeingEdited[key];
+    }
     clientCounter--;
   });
 });
