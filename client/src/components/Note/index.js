@@ -19,6 +19,7 @@ class Note extends React.PureComponent {
         0 6px 20px 0 rgba(0, 0, 0, 0.19);
       &:hover {
         background: #92bcbc;
+        cursor: pointer;
       }
     `;
 

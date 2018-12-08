@@ -27,6 +27,7 @@ class AddButton extends React.PureComponent {
 
     &:hover {
     background: #92bcbc;
+    cursor: pointer;
     }
     `;
     const { addNote } = this.props;

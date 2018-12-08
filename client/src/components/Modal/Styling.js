@@ -23,6 +23,7 @@ export const Submit = styled.button`
   width: 50px;
   &:hover {
     background: #e9f3f3;
+    cursor: pointer;
   }
 `;
 
@@ -78,6 +79,7 @@ export const Trash = styled.button`
   outline: none;
   &:hover {
     background: #92bcbc;
+    cursor: pointer;
   }
 `;
 
