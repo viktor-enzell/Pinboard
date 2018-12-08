@@ -13,12 +13,12 @@ class Note extends React.PureComponent {
       flex-direction: column;
       width: 200px;
       height: 200px;
-      background: #b8d8d8;
+      background: #8CE4A5;
       border-radius: 5px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
         0 6px 20px 0 rgba(0, 0, 0, 0.19);
       &:hover {
-        background: #92bcbc;
+        background: #66DB87;
         cursor: pointer;
       }
     `;

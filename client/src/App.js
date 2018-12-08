@@ -173,7 +173,7 @@ class App extends Component {
     const Background = styled.div`
       display: flex;
       flex-direction: row;
-      background-color: #fff;
+      background-color: #FFF;
       position: fixed;
       width: 100%;
       flex-wrap: wrap;
