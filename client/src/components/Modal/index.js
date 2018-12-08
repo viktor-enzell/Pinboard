@@ -27,10 +27,10 @@ class Modal extends React.Component {
         {modalMode === "normal" && (
           <Wrapper>
             <Main>
-              <HeaderInput placeholder="Header" onChange={headerChange} />
-              <BodyText placeholder="Write here!" onChange={bodyChange} />
+              <HeaderInput placeholder="Title" onChange={headerChange} />
+              <BodyText placeholder="Write your note here!" onChange={bodyChange} />
               <Footer>
-                <Submit onClick={closeModal}>Spara</Submit>
+                <Submit onClick={closeModal}>Save</Submit>
               </Footer>
             </Main>
           </Wrapper>
@@ -47,7 +47,7 @@ class Modal extends React.Component {
               />
               <BodyText onChange={bodyChange} defaultValue={noteToEdit.body} />
               <Footer>
-                <Submit onClick={closeModal}>Spara</Submit>
+                <Submit onClick={closeModal}>Save</Submit>
               </Footer>
             </Main>
           </Wrapper>

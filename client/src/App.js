@@ -166,7 +166,7 @@ class App extends Component {
     delete notesCopy[id];
     this.setState({
       notes: notesCopy
-    }, () => { this.forceUpdate(); });
+    });
   };
 
   render() {
