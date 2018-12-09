@@ -5,8 +5,8 @@ class Header extends React.PureComponent {
   render() {
     const TopBar = styled.div`
       align-items: center;
-      background-color: #BABABA;
-      color: #000;
+      background-color: #001021;
+      color: #F4F6F7;
       padding-top: 45px;
       padding-bottom: 45px;
       text-align: center;

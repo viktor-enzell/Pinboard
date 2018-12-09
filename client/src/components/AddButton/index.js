@@ -15,7 +15,7 @@ class AddButton extends React.PureComponent {
     width: 240px;
     height: 225px;
     margin-right: 30px;
-    background: #E4FF1A;
+    background: #AEC1CC;
     display: flex;
     outline: none;
     border-radius: 5px;
@@ -26,7 +26,7 @@ class AddButton extends React.PureComponent {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     &:hover {
-    background: #CBD817;
+    background: #9CB4C1;
     cursor: pointer;
     }
     `;
