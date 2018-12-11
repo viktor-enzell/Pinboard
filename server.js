@@ -24,6 +24,9 @@ io.on('connection', socket => {
     if (notes.version > version) {
       version = notes.version;
     }
+    if (noteID < Object.keys(notes.notes).length) {
+      noteID = Object.keys(notes.notes).length;
+    }
   });
 
   // Client requesting to edit note
