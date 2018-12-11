@@ -75,7 +75,6 @@ class App extends Component {
     updatedNotes[note.ID] = note;
     this.setState({ notes: updatedNotes });
     this.version++;
-    console.log(this.state.notes);
   }
 
   handleHeaderChange = e => {
