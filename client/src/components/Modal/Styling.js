@@ -5,7 +5,7 @@ export const Main = styled.div`
   flex-direction: column;
   position: fixed;
   padding: 20px;
-  background: #b8d8d8;
+  background: #AEC1CC;
   border-radius: 5px;
   width: 40%;
   height: 60%;
@@ -18,11 +18,12 @@ export const Submit = styled.button`
   outline: none;
   border-radius: 5px;
   border: none;
-  background: #e2efef;
+  background: #F4F6F7;
   height: 30px;
   width: 50px;
   &:hover {
-    background: #e9f3f3;
+    background: #DEE0E1;
+    cursor: pointer;
   }
 `;
 
@@ -33,7 +34,7 @@ export const HeaderInput = styled.input`
   margin-top: 20px;
   margin-bottom: 0.5em;
   font-weight: 700;
-  background: #a5c2c2;
+  background: #9CB4C1;
   outline: none;
   border: black 2px;
   border-radius: 3px;
@@ -47,7 +48,7 @@ export const BodyText = styled.textarea`
   font-size: 14px;
   padding: 0.5em;
   margin-bottom: 30px;
-  background: #a5c2c2;
+  background: #9CB4C1;
   outline: none;
   border: black 2px;
   border-radius: 3px;
@@ -73,11 +74,12 @@ export const Trash = styled.button`
   border: none;
   line-height: 25px;
   width: 25px;
-  //background: none;
+  background: F4F6F7;
   border-radius: 5px;
   outline: none;
   &:hover {
-    background: #92bcbc;
+    background: #DEE0E1;
+    cursor: pointer;
   }
 `;
 
