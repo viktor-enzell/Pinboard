@@ -177,9 +177,10 @@ class App extends Component {
       position: fixed;
       width: 100%;
       flex-wrap: wrap;
+      align-content: flex-start;
       overflow: auto;
-      overflow-y: hidden;
-      height: 100%;
+      overflow-y: auto;
+      height: 80%;
       z-index: 1000;
       padding: 30px;
     `;

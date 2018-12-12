@@ -7,6 +7,7 @@ class Header extends React.PureComponent {
       align-items: center;
       background-color: #001021;
       color: #F4F6F7;
+      height: 20%
       padding-top: 45px;
       padding-bottom: 45px;
       text-align: center;
