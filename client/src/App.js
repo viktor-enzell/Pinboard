@@ -180,7 +180,7 @@ class App extends Component {
       align-content: flex-start;
       overflow: auto;
       overflow-y: auto;
-      height: 100%;
+      height: 80%;
       z-index: 1000;
       padding: 30px;
     `;
