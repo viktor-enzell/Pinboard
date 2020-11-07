@@ -5,7 +5,7 @@ To get things started:
 
 
 * If you dont have NPM, brew install it.
-* `git clone https://github.com/viktor-enzell/Pinboard.git`
+* `git clone https://github.com/viktor-enzell/pinboard.git`
 * Navigate to the Pinboard folder and run `npm install`
 * Navigate to client folder and run `npm install`
 
